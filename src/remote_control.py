@@ -16,7 +16,7 @@ def top_left_channel_1_action(state):
     if state: # state is True (pressed) or False
         if prev_action==2:
             steer_pair.on(steering=0, speed=0)
-        else
+        else:
             steer_pair.on(steering=0, speed=40)
     else:
         steer_pair.off()
@@ -25,7 +25,7 @@ def bottom_left_channel_1_action(state):
     if state:
         if prev_action==1:
             steer_pair.on(steering=0, speed=0)
-        else
+        else:
             steer_pair.on(steering=0, speed=-40)
     else:
         steer_pair.off()
