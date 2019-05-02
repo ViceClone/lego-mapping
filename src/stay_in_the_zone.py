@@ -32,39 +32,36 @@ backward_flag = 0
 left_flag =     0
 
 while True:   
-    # Infrared sensor in proximity mode will measure distance to the closest
-    # object in front of it.
-
     distance = ir.value()
     if distance < 50:
         leds.set_color('LEFT', 'RED')
         leds.set_color('RIGHT', 'RED')
         tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.3)
-
-        if forward_flag:    y+=1
-        elif right_flag:    x+=1
-        elif backward_flag: y-=1
-        elif left_flag:     x-=1
-
+        forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
+                                                                right_flag, backward_flag, left_flag)
+        x, y = updated_position(x,y)
         logs.write(str(distance) + ', 100, 0, ' + str(x) + ', ' + str(y) + '\n')
-
     else:
         leds.set_color('LEFT', 'GREEN')   
         leds.set_color('RIGHT', 'GREEN')
         tank_drive.on_for_seconds(SpeedPercent(30), SpeedPercent(30), 3)
-
-        if forward_flag:    y+=1
-        elif right_flag:    x+=1
-        elif backward_flag: y-=1
-        elif left_flag:     x-=1
-
-        if forward_flag:    right_flag, forward_flag = 1, 0
-        elif right_flag:    backward_flag, right_flag = 1, 0
-        elif backward_flag: left_flag, backward_flag = 1, 0
-        elif left_flag:     forward_flag, left_flag = 1, 0
-
+        x, y = updated_position(x,y)
         logs.write(str(distance) + ', 30, 30, ' + str(x) + ', ' + str(y) + '\n')
 
 logs.close()
 Sound.beep()       
 leds.set_color('LEFT', 'GREEN')  
+
+def updated_position(x,y):
+    if forward_flag:    y+=1
+    elif right_flag:    x+=1
+    elif backward_flag: y-=1
+    elif left_flag:     x-=1
+    return x,y
+
+def update_flags_on_turn(forward_flag, right_flag, backward_flag, left_flag):
+    if forward_flag:    right_flag, forward_flag =  1, 0
+    elif right_flag:    backward_flag, right_flag = 1, 0
+    elif backward_flag: left_flag, backward_flag =  1, 0
+    elif left_flag:     forward_flag, left_flag =   1, 0
+    return forward_flag, right_flag, backward_flag, left_flag
