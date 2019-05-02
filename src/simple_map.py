@@ -18,19 +18,39 @@ def line(p0,p1):
         p0 = p1
         p1 = p
     deltax = p1[0]-p0[0]
-    deltay = p1[1]-p0[1]    
-    if deltax==0:
+    deltay = p1[1]-p0[1]
+    if np.abs(deltax)>np.abs(deltay):    
+        if deltax==0:
+            return line_pixels
+        deltaerr = np.abs(deltay/deltax)
+        error = 0.0
+        y = p0[1]
+        for x in range(p0[0],p1[0]+1):
+            line_pixels.append((x,y))
+            error += deltaerr
+            if error>=0.5:
+                y += np.sign(deltay)*1
+                error -= 1.0
         return line_pixels
-    deltaerr = np.abs(deltay/deltax)
-    error = 0.0
-    y = p0[1]
-    for x in range(p0[0],p1[0]+1):
-        line_pixels.append((x,y))
-        error += deltaerr
-        if error>=0.5:
-            y += np.sign(deltay)*1
-            error -= 1.0
-    return line_pixels
+    else:
+        if p1[1]<p0[1]:
+            p = p0
+            p0 = p1
+            p1 = p
+        deltax = p1[0]-p0[0]
+        deltay = p1[1]-p0[1]
+        if deltay==0:
+            return line_pixels
+        deltaerr = np.abs(deltax/deltay)
+        error = 0.0
+        x = p0[0]
+        for y in range(p0[1],p1[1]+1):
+            line_pixels.append((x,y))
+            error += deltaerr
+            if error>=0.5:
+                x += np.sign(deltax)*1
+                error -= 1.0
+        return line_pixels
 
 def update_map(position,distance,angle):
     dx = int(np.floor(distance*np.cos(angle)))
@@ -44,7 +64,7 @@ def update_map(position,distance,angle):
     return
 
 def test():
-    for theta in np.arange(0,np.pi,0.01):
+    for theta in np.arange(-np.pi,0,0.005):
         print(theta)
         update_map((250,250),100,theta)
     print(np.sum(map))
