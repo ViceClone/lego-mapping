@@ -15,29 +15,31 @@ tank_drive = MoveTank(OUTPUT_A, OUTPUT_B)
 
 # Info logging
 
-logs = open("robot.log","w")
+logs = open("robot.csv","w")
+logs.write('infrared_distance, left_motor, right_motor, x, y\n')
+logs.write('100, 0, 0, 0, 0\n')
 
 # Put the infrared sensor into proximity mode.
 ir.mode = 'IR-PROX'
 
-print("The color changes due to distance.")
+# Robot Position
+x,y = 0, 0
 
 while True:   
     # Infrared sensor in proximity mode will measure distance to the closest
     # object in front of it.
 
     distance = ir.value()
-    logs.write('infrared_distance ' + str(distance) + '\n')
-    if distance < 75:
+    if distance < 50:
         leds.set_color('LEFT', 'RED')
         leds.set_color('RIGHT', 'RED')
-        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.2)
-        logs.write('right_turn' + '\n')
+        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.3)
+        logs.write(str(distance) + ', 100, 0, ' + str(x) + ', ' + str(y) + '\n')
     else:
         leds.set_color('LEFT', 'GREEN')   
         leds.set_color('RIGHT', 'GREEN')
         tank_drive.on_for_seconds(SpeedPercent(30), SpeedPercent(30), 3)
-        logs.write('move_forward' + '\n')
+        logs.write(str(distance) + ', 30, 30, ' + str(x) + ', ' + str(y) + '\n')
 
 logs.close()
 Sound.beep()       
