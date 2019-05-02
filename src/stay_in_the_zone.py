@@ -28,10 +28,10 @@ while True:
 
     distance = ir.value()
     logs.write('infrared_distance ' + str(distance) + '\n')
-    if distance < 50:
+    if distance < 75:
         leds.set_color('LEFT', 'RED')
         leds.set_color('RIGHT', 'RED')
-        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.5)
+        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.2)
         logs.write('right_turn' + '\n')
     else:
         leds.set_color('LEFT', 'GREEN')   
