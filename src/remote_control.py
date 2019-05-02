@@ -1,6 +1,6 @@
+from time import sleep
 from ev3dev2.motor import OUTPUT_A, OUTPUT_B, MoveSteering
 from ev3dev2.sensor.lego import InfraredSensor
-from time import sleep
 
 # top left: go forwards 1
 # bottom left: go backwards 2
