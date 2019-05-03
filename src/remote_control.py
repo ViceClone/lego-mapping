@@ -12,24 +12,28 @@ ir = InfraredSensor()
 # Set the remote to channel 1
 
 def top_left_channel_1_action(state):
+    print("top left button")
     if state: # state is True (pressed) or False
             steer_pair.on(steering=0, speed=40)
     else:
         steer_pair.off()
 
 def bottom_left_channel_1_action(state):
+    print("bottom left button")
     if state:
             steer_pair.on(steering=0, speed=-40)
     else:
         steer_pair.off()
 
 def top_right_channel_1_action(state):
+    print("top right button")
     if state:
         steer_pair.on(steering=100, speed=30)
     else:
         steer_pair.off()
 
 def bottom_right_channel_1_action(state):
+    print("bottom right button")
     if state:
         steer_pair.on(steering=-100, speed=30)
     else:
@@ -40,6 +44,6 @@ ir.on_channel1_bottom_left = bottom_left_channel_1_action
 ir.on_channel1_top_right = top_right_channel_1_action
 ir.on_channel1_bottom_right = bottom_right_channel_1_action
 
-while True:
+while True:            
     ir.process()
     sleep(0.01)
