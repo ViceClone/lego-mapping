@@ -17,7 +17,7 @@ from time import sleep
 # debug=False               print the current position (on motor speed change) and
 #                           echo all the movement logs when the object is destroyed
 # curve_adjustment=0.873    use curve adjustment factor of 0.873, see below ('percision')  
-pos_info = Odometrium(left='B', right='C', wheel_diameter=5.5, wheel_distance=12,
+pos_info = Odometrium(left='A', right='B', wheel_diameter=5.5, wheel_distance=12,
                       count_per_rot_left=None, count_per_rot_right=360, debug=False,
                       curve_adjustment=1)
 
