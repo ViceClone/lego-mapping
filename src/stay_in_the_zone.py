@@ -1,17 +1,17 @@
 import sys
 import signal
 
-import numpy as np
-import matplotlib.pyplot as plt
+# import numpy as np
+# import matplotlib.pyplot as plt
 
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank
-from ev3dev2.sensor import INPUT_1, INPUT_4
+from ev3dev2.sensor import INPUT_1
 from ev3dev2.sensor.lego import TouchSensor, InfraredSensor
 from ev3dev2.led import Leds
 from ev3dev2.sound import Sound
 
 # Sensors and motors input and output
-ir = InfraredSensor(INPUT_4) 
+ir = InfraredSensor(INPUT_1) 
 leds = Leds()
 tank_drive = MoveTank(OUTPUT_A, OUTPUT_B)
 
@@ -54,20 +54,20 @@ def update_flags_on_turn(forward_flag, right_flag, backward_flag, left_flag):
     return forward_flag, right_flag, backward_flag, left_flag
 
 # Generating the circuit
-def generate_circuit():
-    circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
-    plt.scatter(*zip(*circuit_matrix[1:]))
-    plt.plot(*zip(*circuit_matrix[1:]))
-    plt.show()
+# def generate_circuit():
+#     circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
+#     plt.scatter(*zip(*circuit_matrix[1:]))
+#     plt.plot(*zip(*circuit_matrix[1:]))
+#     plt.show()
 
 # Handling the ^C key interruption
 def signal_handler(sig, frame):
     print('\nGenerating the circuit')
     logs.close()
     robot_positions.close()
-    Sound.beep()       
     leds.set_color('LEFT', 'GREEN')  
-    generate_circuit()
+    leds.set_color('RIGHT', 'GREEN')  
+    # generate_circuit()
     sys.exit(0)
 
 while True:   
@@ -76,7 +76,7 @@ while True:
     if distance < 50:
         leds.set_color('LEFT', 'RED')
         leds.set_color('RIGHT', 'RED')
-        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.3)
+        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.35)
         forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                 right_flag, backward_flag, left_flag)
         x, y = update_position(x,y)
@@ -87,7 +87,7 @@ while True:
     else:
         leds.set_color('LEFT', 'GREEN')   
         leds.set_color('RIGHT', 'GREEN')
-        tank_drive.on_for_seconds(SpeedPercent(30), SpeedPercent(30), 3)
+        tank_drive.on_for_seconds(SpeedPercent(25), SpeedPercent(25), 3)
         x, y = update_position(x,y)
         logs.write(str(distance) + ', 30, 30, ' + str(x) + ', ' + str(y) + '\n')
         robot_positions.write(str(x) + ', ' + str(y) + '\n')
