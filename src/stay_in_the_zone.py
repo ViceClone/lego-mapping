@@ -89,7 +89,7 @@ while True:
         leds.set_color('LEFT', 'GREEN')   
         leds.set_color('RIGHT', 'GREEN')
         left_speed, right_speed, = 25, 25
-        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 3)
+        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 100)
         x, y = update_position(x,y)
         logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
         robot_positions.write(str(x) + ', ' + str(y) + '\n')
