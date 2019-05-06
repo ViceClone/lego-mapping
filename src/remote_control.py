@@ -7,7 +7,7 @@ from ev3dev2.sensor.lego import InfraredSensor
 # top right: turn right on the spot 3
 # bottom right: turn left on the spot 4
 
-steer_pair = MoveSteering(OUTPUT_A, OUTPUT_B)
+steer_pair = MoveTank(OUTPUT_A, OUTPUT_B)
 ir = InfraredSensor()
 # Set the remote to channel 1
 
