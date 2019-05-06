@@ -1,8 +1,8 @@
 import sys
 import signal
 
-# import numpy as np
-# import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
 
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank
 from ev3dev2.sensor import INPUT_1
@@ -54,11 +54,11 @@ def update_flags_on_turn(forward_flag, right_flag, backward_flag, left_flag):
     return forward_flag, right_flag, backward_flag, left_flag
 
 # Generating the circuit
-# def generate_circuit():
-#     circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
-#     plt.scatter(*zip(*circuit_matrix[1:]))
-#     plt.plot(*zip(*circuit_matrix[1:]))
-#     plt.show()
+def generate_circuit():
+    circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
+    plt.scatter(*zip(*circuit_matrix[1:]))
+    plt.plot(*zip(*circuit_matrix[1:]))
+    plt.show()
 
 # Handling the ^C key interruption
 def signal_handler(sig, frame):
@@ -67,7 +67,7 @@ def signal_handler(sig, frame):
     robot_positions.close()
     leds.set_color('LEFT', 'GREEN')  
     leds.set_color('RIGHT', 'GREEN')  
-    # generate_circuit()
+    generate_circuit()
     sys.exit(0)
 
 while True:   
@@ -76,20 +76,22 @@ while True:
     if distance < 50:
         leds.set_color('LEFT', 'RED')
         leds.set_color('RIGHT', 'RED')
-        tank_drive.on_for_seconds(SpeedPercent(100), SpeedPercent(0), 1.35)
+        left_speed, right_speed, = 100, 0
+        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
         forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                 right_flag, backward_flag, left_flag)
         x, y = update_position(x,y)
-        logs.write(str(distance) + ', 100, 0, ' + str(x) + ', ' + str(y) + '\n')    
+        logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
         robot_positions.write(str(x) + ', ' + str(y) + '\n') 
 
     # No obstacle in front
     else:
         leds.set_color('LEFT', 'GREEN')   
         leds.set_color('RIGHT', 'GREEN')
-        tank_drive.on_for_seconds(SpeedPercent(25), SpeedPercent(25), 3)
+        left_speed, right_speed, = 25, 25
+        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 3)
         x, y = update_position(x,y)
-        logs.write(str(distance) + ', 30, 30, ' + str(x) + ', ' + str(y) + '\n')
+        logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
         robot_positions.write(str(x) + ', ' + str(y) + '\n')
         
     # Handling the ^C key interruption
