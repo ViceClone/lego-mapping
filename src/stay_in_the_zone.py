@@ -1,8 +1,8 @@
 import sys
 import signal
 
-import numpy as np
-import matplotlib.pyplot as plt
+# import numpy as np
+# import matplotlib.pyplot as plt
 
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank
 from ev3dev2.sensor import INPUT_1
@@ -54,11 +54,11 @@ def update_flags_on_turn(forward_flag, right_flag, backward_flag, left_flag):
     return forward_flag, right_flag, backward_flag, left_flag
 
 # Generating the circuit
-def generate_circuit():
-    circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
-    plt.scatter(*zip(*circuit_matrix[1:]))
-    plt.plot(*zip(*circuit_matrix[1:]))
-    plt.show()
+# def generate_circuit():
+#     circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
+#     plt.scatter(*zip(*circuit_matrix[1:]))
+#     plt.plot(*zip(*circuit_matrix[1:]))
+#     plt.show()
 
 # Handling the ^C key interruption
 def signal_handler(sig, frame):
@@ -67,7 +67,7 @@ def signal_handler(sig, frame):
     robot_positions.close()
     leds.set_color('LEFT', 'GREEN')  
     leds.set_color('RIGHT', 'GREEN')  
-    generate_circuit()
+    # generate_circuit()
     sys.exit(0)
 
 while True:   
