@@ -44,6 +44,7 @@ ir.on_channel1_bottom_left = bottom_left_channel_1_action
 ir.on_channel1_top_right = top_right_channel_1_action
 ir.on_channel1_bottom_right = bottom_right_channel_1_action
 
+
 while True:            
     ir.process()
     sleep(0.01)
