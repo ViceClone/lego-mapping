@@ -89,11 +89,11 @@ def deterministic_exploration():
         distance = ir.value()
 
         # If an obstacle occurs
-        if distance < 50:
+        if distance < 25:
             leds.set_color('LEFT', 'RED')
             leds.set_color('RIGHT', 'RED')
             left_speed, right_speed, = 50, -50
-            tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
+            tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 0.90)
             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                     right_flag, backward_flag, left_flag)
             x, y = update_position(x,y)
@@ -128,7 +128,7 @@ def naive_exploration():
             else:
                 left_speed, right_speed, = 50, -50
                 turn_orientation=1
-            tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
+            tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 0.89)
             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                     right_flag, backward_flag, left_flag, turn_orientation)
             x, y = update_position(x,y)
@@ -148,4 +148,31 @@ def naive_exploration():
         # Handling the ^C key interruption
         signal.signal(signal.SIGINT, signal_handler)
 
-deterministic_exploration()
+# Algorithm demo
+while True:   
+    distance = ir.value()
+
+    # If an obstacle occurs
+    if distance < 25:
+        leds.set_color('LEFT', 'RED')
+        leds.set_color('RIGHT', 'RED')
+        left_speed, right_speed, = 50, -50
+        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 0.91)
+        forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
+                                                                right_flag, backward_flag, left_flag)
+        x, y = update_position(x,y)
+        logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+        robot_positions.write(str(x) + ', ' + str(y) + '\n') 
+
+    # No obstacle in front
+    else:
+        leds.set_color('LEFT', 'GREEN')   
+        leds.set_color('RIGHT', 'GREEN')
+        left_speed, right_speed, = 25, 25
+        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
+        x, y = update_position(x,y)
+        logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
+        robot_positions.write(str(x) + ', ' + str(y) + '\n')
+
+    # Handling the ^C key interruption
+    signal.signal(signal.SIGINT, signal_handler)
