@@ -9,12 +9,14 @@ rays_list = []
 import time
 import threading
 f = open("log_scan.csv","w")
+f.write("time , distance \n")
 def get_ir_value():
     rays = []
     debut = time.time()
     while time.time()-debut<19:
         rays.extend([ir.value()])
         print(time.time()-debut," , ",ir.value())
+        f.write(str(time.time()-debut)+" , "+str(ir.value())+"\n")
         time.sleep(0.01)
     return rays
 

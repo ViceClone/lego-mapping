@@ -43,6 +43,7 @@ def line(p0,p1):
         return line_pixels
 
 def update_map(position,distance,angle):
+    distance+=33
     dx = int(np.floor(distance*np.cos(angle)))
     dy = int(np.floor(distance*np.sin(angle)))
     p1 = (position[0]+dx,position[1]+dy)
@@ -57,10 +58,21 @@ def read_log():
     import pandas as pd
     log = pd.read_csv("log_scan.csv")
     angle = log[log.columns[0]].values
-    angle = angle/18.5*np.pi*2
+    angle = angle/18.8*np.pi*2
     distance = log[log.columns[1]].values 
-    for i in range(log.size):
-        update_map((250,250),distance[i],angle[i])  
+    for i in range(log.size//2):
+        update_map((150,150),distance[i],angle[i])  
+
+    log = pd.read_csv("log_scan1.csv")
+    angle = log[log.columns[0]].values
+    angle = angle/18.8*np.pi*2
+    distance = log[log.columns[1]].values 
+    for i in range(log.size//2):
+        update_map((265,150),distance[i],angle[i]) 
+
     import matplotlib.pyplot as plt
     plt.imshow(map)
     plt.show()
+
+if __name__ == "__main__":
+    read_log()
