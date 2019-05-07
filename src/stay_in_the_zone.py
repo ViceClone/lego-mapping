@@ -86,32 +86,32 @@ def signal_handler(sig, frame):
 # The deterministic exploration
 def deterministic_exploration():
     while True:   
-    distance = ir.value()
+        distance = ir.value()
 
-    # If an obstacle occurs
-    if distance < 50:
-        leds.set_color('LEFT', 'RED')
-        leds.set_color('RIGHT', 'RED')
-        left_speed, right_speed, = 100, 0
-        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
-        forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
-                                                                right_flag, backward_flag, left_flag)
-        x, y = update_position(x,y)
-        logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
-        robot_positions.write(str(x) + ', ' + str(y) + '\n') 
+        # If an obstacle occurs
+        if distance < 50:
+            leds.set_color('LEFT', 'RED')
+            leds.set_color('RIGHT', 'RED')
+            left_speed, right_speed, = 50, -50
+            tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
+            forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
+                                                                    right_flag, backward_flag, left_flag)
+            x, y = update_position(x,y)
+            logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+            robot_positions.write(str(x) + ', ' + str(y) + '\n') 
 
-    # No obstacle in front
-    else:
-        leds.set_color('LEFT', 'GREEN')   
-        leds.set_color('RIGHT', 'GREEN')
-        left_speed, right_speed, = 25, 25
-        tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
-        x, y = update_position(x,y)
-        logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
-        robot_positions.write(str(x) + ', ' + str(y) + '\n')
+        # No obstacle in front
+        else:
+            leds.set_color('LEFT', 'GREEN')   
+            leds.set_color('RIGHT', 'GREEN')
+            left_speed, right_speed, = 25, 25
+            tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
+            x, y = update_position(x,y)
+            logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
+            robot_positions.write(str(x) + ', ' + str(y) + '\n')
 
-    # Handling the ^C key interruption
-    signal.signal(signal.SIGINT, signal_handler)
+        # Handling the ^C key interruption
+        signal.signal(signal.SIGINT, signal_handler)
 
 # The naive exploration
 def naive_exploration():
@@ -123,10 +123,10 @@ def naive_exploration():
             leds.set_color('LEFT', 'RED')
             leds.set_color('RIGHT', 'RED')
             if random.random() < turn_orientation_probability:
-                left_speed, right_speed, = 0, 100
+                left_speed, right_speed, = -50, 50
                 turn_orientation=0
             else:
-                left_speed, right_speed, = 100, 0
+                left_speed, right_speed, = 50, -50
                 turn_orientation=1
             tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
@@ -148,3 +148,4 @@ def naive_exploration():
         # Handling the ^C key interruption
         signal.signal(signal.SIGINT, signal_handler)
 
+deterministic_exploration()
