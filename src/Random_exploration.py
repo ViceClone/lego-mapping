@@ -3,9 +3,6 @@ import signal
 import random
 import threading
 
-# import numpy as np
-# import matplotlib.pyplot as plt
-
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank
 from ev3dev2.sensor import INPUT_1
 from ev3dev2.sensor.lego import TouchSensor, InfraredSensor
@@ -18,8 +15,8 @@ leds = Leds()
 tank_drive = MoveTank(OUTPUT_A, OUTPUT_B)
 
 # Info logging
-logs = open("robot.csv","w")
-robot_positions = open("robot_positions.csv","w")
+logs = open("random.csv","w")
+robot_positions = open("robot_random_positions.csv","w")
 
 # Info inisialization
 logs.write('infrared_distance, left_motor, right_motor, x, y\n')
@@ -70,14 +67,6 @@ def update_flags_on_turn(forward_flag, right_flag, backward_flag, left_flag, tur
         elif left_flag:     forward_flag, left_flag =   1, 0
     return forward_flag, right_flag, backward_flag, left_flag
 
-# Generating the circuit
-# def generate_circuit():
-#     circuit_matrix = np.genfromtxt('robot_positions.csv', delimiter=',')
-#     plt.scatter(*zip(*circuit_matrix[1:]))
-#     plt.plot(*zip(*circuit_matrix[1:]))
-#     plt.show()
-
-# Handling the ^C key interruption
 def signal_handler(sig, frame):
     print('\nGenerating the circuit')
     logs.close()
@@ -87,79 +76,7 @@ def signal_handler(sig, frame):
     # generate_circuit()
     sys.exit(0)
 
-    
-
-# The deterministic exploration
-# def deterministic_exploration():
-#     while True:   
-#     distance = ir.value()
-
-#     # If an obstacle occurs
-#     if distance < 50:
-#         leds.set_color('LEFT', 'RED')
-#         leds.set_color('RIGHT', 'RED')
-#         left_speed, right_speed, = 100, 0
-#         tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
-#         forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
-#                                                                 right_flag, backward_flag, left_flag)
-#         x, y = update_position(x,y)
-#         logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
-#         robot_positions.write(str(x) + ', ' + str(y) + '\n') 
-
-#     # No obstacle in front
-#     else:
-#         leds.set_color('LEFT', 'GREEN')   
-#         leds.set_color('RIGHT', 'GREEN')
-#         left_speed, right_speed, = 25, 25
-#         tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
-#         x, y = update_position(x,y)
-#         logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
-#         robot_positions.write(str(x) + ', ' + str(y) + '\n')
-
-#     # Handling the ^C key interruption
-#     signal.signal(signal.SIGINT, signal_handler)
-
-# # The naive exploration
-# def naive_exploration():
-    # while True:   
-    #     distance = ir.value()
-
-    #     # If an obstacle occurs
-    #     if distance < 50:
-    #         leds.set_color('LEFT', 'RED')
-    #         leds.set_color('RIGHT', 'RED')
-    #         if random.random() < turn_orientation_probability:
-    #             left_speed, right_speed, = 0, 100
-    #             turn_orientation=0
-    #         else:
-    #             left_speed, right_speed, = 100, 0
-    #             turn_orientation=1
-    #         tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1.8)
-    #         forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
-    #                                                                 right_flag, backward_flag, left_flag, turn_orientation)
-    #         x, y = update_position(x,y)
-    #         logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
-    #         robot_positions.write(str(x) + ', ' + str(y) + '\n') 
-
-    #     # No obstacle in front
-    #     else:
-    #         leds.set_color('LEFT', 'GREEN')   
-    #         leds.set_color('RIGHT', 'GREEN')
-    #         left_speed, right_speed, = 25, 25
-    #         tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
-    #         x, y = update_position(x,y)
-    #         logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
-    #         robot_positions.write(str(x) + ', ' + str(y) + '\n')
-            
-    #     # Handling the ^C key interruption
-    #     signal.signal(signal.SIGINT, signal_handler)
-
-#variable globale utilisee par le thread qui mesure les valeurs du senseur en reactive_exploration
-#comment on initialise???
-distance_thread = ir.value()
-
-def read_sensor():
-    distance_thread = ir.value()
+distance = ir.value()
 
 # Indicates if we have to do a 180 turn 
 correct_after_turn = False
@@ -169,10 +86,10 @@ correct_after_random_turn = False
     # thread_sensor = threading.Thread(target = read_sensor)
     # thread_sensor.start()
 # while True:  
-#     distance_thread = ir.value() 
+#     distance = ir.value() 
 #     # If an obstacle occurs or if aleatory turn occurs  
 #     # If an obstacle occurs or if aleatory turn occurs
-#     if distance_thread < 15 :
+#     if distance < 15 :
 #         leds.set_color('LEFT', 'RED')
 #         leds.set_color('RIGHT', 'RED')
 #         if correct_after_turn :
@@ -181,13 +98,13 @@ correct_after_random_turn = False
 #             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
 #                                                                     right_flag, backward_flag, left_flag, turn_orientation)
 #             x, y = update_position(x,y)
-#             logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+#             logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
 #             robot_positions.write(str(x) + ', ' + str(y) + '\n') 
 #             #on update les positions deux fois car les fonctions sont faites pour des tours 90 degrees
 #             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
 #                                                                     right_flag, backward_flag, left_flag, turn_orientation)
 #             x, y = update_position(x,y)
-#             logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+#             logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
 #             robot_positions.write(str(x) + ', ' + str(y) + '\n') 
 #             correct_after_turn = False  
 #         else:
@@ -203,7 +120,7 @@ correct_after_random_turn = False
 #             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
 #                                                                     right_flag, backward_flag, left_flag, turn_orientation)
 #             x, y = update_position(x,y)
-#             logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+#             logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
 #             robot_positions.write(str(x) + ', ' + str(y) + '\n') 
 #             # No obstacle in front
 #     else:
@@ -214,18 +131,18 @@ correct_after_random_turn = False
 #         left_speed, right_speed, = 25, 25
 #         tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
 #         x, y = update_position(x,y)
-#         logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
+#         logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
 #         robot_positions.write(str(x) + ', ' + str(y) + '\n')
 #     # Handling the ^C key interruption
 #     signal.signal(signal.SIGINT, signal_handler)
     # thread_sensor.join()
 
-# def reactive_with_random_turns():
+turn_distance = 25
+
 while True:  
-    distance_thread = ir.value() 
+    distance = ir.value() 
     # If an obstacle occurs or if aleatory turn occurs  
-    # If an obstacle occurs or if aleatory turn occurs
-    if distance_thread < 25 :
+    if distance < turn_distance :
         leds.set_color('LEFT', 'RED')
         leds.set_color('RIGHT', 'RED')
         if correct_after_random_turn :
@@ -237,7 +154,7 @@ while True:
             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                     right_flag, backward_flag, left_flag, turn_orientation)
             x, y = update_position(x,y)
-            logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+            logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
             robot_positions.write(str(x) + ', ' + str(y) + '\n') 
             correct_after_random_turn = False
         else:
@@ -252,7 +169,7 @@ while True:
             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                     right_flag, backward_flag, left_flag, turn_orientation)
             x, y = update_position(x,y)
-            logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+            logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
             robot_positions.write(str(x) + ', ' + str(y) + '\n') 
             # No obstacle in front
     else:
@@ -272,7 +189,7 @@ while True:
             forward_flag, right_flag, backward_flag, left_flag = update_flags_on_turn(forward_flag, 
                                                                     right_flag, backward_flag, left_flag, turn_orientation)
             x, y = update_position(x,y)
-            logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
+            logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n') 
             robot_positions.write(str(x) + ', ' + str(y) + '\n') 
             correct_after_random_turn = True
         else:
@@ -282,10 +199,9 @@ while True:
             left_speed, right_speed, = 50, 50
             tank_drive.on_for_seconds(SpeedPercent(left_speed), SpeedPercent(right_speed), 1)
             x, y = update_position(x,y)
-            logs.write(str(distance_thread) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
+            logs.write(str(distance) + ', ' + str(left_speed) + ', ' + str(right_flag) + ', ' + str(x) + ', ' + str(y) + '\n')
             robot_positions.write(str(x) + ', ' + str(y) + '\n')
     # Handling the ^C key interruption
     signal.signal(signal.SIGINT, signal_handler)
 
-# if __name__ == "__main__":
-#  reactive_exploration()
+
