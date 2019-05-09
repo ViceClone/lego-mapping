@@ -33,13 +33,13 @@ def top_left_channel_1_action(state):
 def bottom_left_channel_1_action(state):
 	print("bottom left button")
     if not remote:
-	    tank_drive.on(-60,-60)
+        tank_drive.on(-60,-60)
 	# else:
 	# 	tank_drive.off()
 
 def top_right_channel_1_action(state):
 	print("top right button")
-	if not remote:
+    if not remote:
 	    tank_drive.on(50, -50)
 	# if state:
 		#tank_drive.on_for_seconds(50, -50, 0.95)

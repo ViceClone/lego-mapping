@@ -7,7 +7,7 @@ import threading
 # import matplotlib.pyplot as plt
 
 from time import sleep
-from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, SpeedPercent, MoveTank,MoveSteering
+from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B, MoveTank
 from ev3dev2.sensor import INPUT_1
 from ev3dev2.sensor.lego import TouchSensor, InfraredSensor
 from ev3dev2.led import Leds
@@ -26,25 +26,21 @@ end = False
 
 def top_left_channel_1_action(state):
 	print("top left button")
-	tank_drive.on(60,60)
+	tank_drive.on_for_seconds(60,60,0.5)
 
 def bottom_left_channel_1_action(state):
 	print("bottom left button")
-	tank_drive.on(-60,-60)
+	tank_drive.on_for_seconds(-60,-60,0.5)
 	# else:
 	# 	tank_drive.off()
 
 def top_right_channel_1_action(state):
 	print("top right button")
-	tank_drive.on(50, -50)
-	# if state:
-		#tank_drive.on_for_seconds(50, -50, 0.95)
-	# else:
-	# 	tank_drive.off()
+	tank_drive.on_for_seconds(-50,50,0.5)
 
 def bottom_right_channel_1_action(state):
 	print("bottom right button")
-	tank_drive.on(-50, 50)
+	tank_drive.on_for_seconds(50,-50,0.5)
 
 def beacon_channel_1_action(state):
 	print("beacon button")
@@ -63,6 +59,7 @@ print("ready")
 while not end: 
 	ir.process()
 	sleep(0.01)
+sys.exit(0)
 
 
 
