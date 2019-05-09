@@ -63,13 +63,6 @@ def read_log():
     for i in range(log.size//2):
         update_map((150,150),distance[i],angle[i])  
 
-    log = pd.read_csv("log_scan1.csv")
-    angle = log[log.columns[0]].values
-    angle = angle/18.8*np.pi*2
-    distance = log[log.columns[1]].values 
-    for i in range(log.size//2):
-        update_map((265,150),distance[i],angle[i]) 
-
     import matplotlib.pyplot as plt
     plt.imshow(map)
     plt.show()
