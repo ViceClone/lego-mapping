@@ -54,18 +54,21 @@ def update_map(position,distance,angle):
     # end attempt
     return
 
-def read_log():
+def read_log(point=(250,250),filename="log_scan.csv"):
     import pandas as pd
-    log = pd.read_csv("log_scan.csv")
+    log = pd.read_csv(filename)
     angle = log[log.columns[0]].values
     angle = angle/18.8*np.pi*2
     distance = log[log.columns[1]].values 
     for i in range(log.size//2):
-        update_map((150,150),distance[i],angle[i])  
+        update_map(point,distance[i],angle[i])  
 
+    
+
+if __name__ == "__main__":
+
+    read_log(point=(250,250),filename="log_scan.csv")
+    read_log(point=(360,250),filename="log_scan1.csv")
     import matplotlib.pyplot as plt
     plt.imshow(map)
     plt.show()
-
-if __name__ == "__main__":
-    read_log()
